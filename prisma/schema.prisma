@@ -1,0 +1,227 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NOSHOW
+}
+
+enum PaymentMethod {
+  PAY_AT_SALON
+  UPI
+  CARD
+  NET_BANKING
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  REFUNDED
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FLAT
+}
+
+enum MembershipStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+model Admin {
+  id           String    @id @default(uuid()) @db.Uuid
+  email        String    @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Customer {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String
+  phone       String       @unique
+  bookings    Booking[]
+  memberships Membership[]
+  reviews     Review[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Staff {
+  id        String          @id @default(uuid()) @db.Uuid
+  name      String
+  role      String
+  imageUrl  String?
+  isActive  Boolean         @default(true)
+  schedules StaffSchedule[]
+  leaves    StaffLeave[]
+  bookings  Booking[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model StaffSchedule {
+  id         String   @id @default(uuid()) @db.Uuid
+  staffId    String   @db.Uuid
+  staff      Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  dayOfWeek  Int      // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime  String   // e.g. "09:00"
+  endTime    String   // e.g. "18:00"
+  lunchStart String   // e.g. "13:00"
+  lunchEnd   String   // e.g. "14:00"
+  
+  @@unique([staffId, dayOfWeek])
+}
+
+model StaffLeave {
+  id      String   @id @default(uuid()) @db.Uuid
+  staffId String   @db.Uuid
+  staff   Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  date    DateTime @db.Date
+  reason  String?
+  
+  @@unique([staffId, date])
+}
+
+model Service {
+  id          String           @id @default(uuid()) @db.Uuid
+  name        String           @unique
+  slug        String           @unique
+  category    String           // e.g. "HAIR", "SKIN", "BRIDAL", "NAILS"
+  description String           @db.Text
+  benefits    String[]         // Benefits list
+  price       Decimal          @db.Decimal(10, 2)
+  offerPrice  Decimal?         @db.Decimal(10, 2)
+  duration    Int              // Duration in minutes
+  imageUrl    String
+  isActive    Boolean          @default(true)
+  bookings    BookingService[]
+  packages    PackageService[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Booking {
+  id             String           @id @default(uuid()) @db.Uuid
+  bookingId      String           @unique // e.g. "ARM-2026-XXXX"
+  customerId     String           @db.Uuid
+  customer       Customer         @relation(fields: [customerId], references: [id])
+  staffId        String?          @db.Uuid
+  staff          Staff?           @relation(fields: [staffId], references: [id], onDelete: SetNull)
+  date           DateTime         @db.Date
+  startTime      String           // e.g. "10:30"
+  endTime        String           // e.g. "11:30"
+  notes          String?          @db.Text
+  status         BookingStatus    @default(PENDING)
+  paymentMethod  PaymentMethod    @default(PAY_AT_SALON)
+  paymentStatus  PaymentStatus    @default(PENDING)
+  totalAmount    Decimal          @db.Decimal(10, 2)
+  discountAmount Decimal          @default(0.00) @db.Decimal(10, 2)
+  offerId        String?          @db.Uuid
+  offer          Offer?           @relation(fields: [offerId], references: [id], onDelete: SetNull)
+  invoiceUrl     String?
+  services       BookingService[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([date])
+}
+
+model BookingService {
+  id             String   @id @default(uuid()) @db.Uuid
+  bookingId      String   @db.Uuid
+  booking        Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  serviceId      String   @db.Uuid
+  service        Service  @relation(fields: [serviceId], references: [id])
+  priceAtBooking Decimal  @db.Decimal(10, 2) // Snapshots the price at booking time
+}
+
+model Package {
+  id           String           @id @default(uuid()) @db.Uuid
+  name         String
+  description  String           @db.Text
+  price        Decimal          @db.Decimal(10, 2)
+  validityDays Int              // e.g., 30 for monthly membership
+  isActive     Boolean          @default(true)
+  services     PackageService[]
+  memberships  Membership[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model PackageService {
+  id        String  @id @default(uuid()) @db.Uuid
+  packageId String  @db.Uuid
+  package   Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  serviceId String  @db.Uuid
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  @@unique([packageId, serviceId])
+}
+
+model Membership {
+  id         String           @id @default(uuid()) @db.Uuid
+  customerId String           @db.Uuid
+  customer   Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  packageId  String           @db.Uuid
+  package    Package          @relation(fields: [packageId], references: [id])
+  startDate  DateTime         @db.Date
+  endDate    DateTime         @db.Date
+  status     MembershipStatus @default(ACTIVE)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+}
+
+model Offer {
+  id            String       @id @default(uuid()) @db.Uuid
+  title         String
+  code          String       @unique // e.g. "GLOW20"
+  description   String?      @db.Text
+  discountType  DiscountType
+  discountValue Decimal      @db.Decimal(10, 2)
+  startDate     DateTime
+  endDate       DateTime
+  isActive      Boolean      @default(true)
+  bookings      Booking[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Holiday {
+  id     String   @id @default(uuid()) @db.Uuid
+  date   DateTime @unique @db.Date
+  reason String?
+}
+
+model Review {
+  id           String    @id @default(uuid()) @db.Uuid
+  customerId   String?   @db.Uuid
+  customer     Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customerName String    // Backs up name if customer object is deleted or imported
+  rating       Int       // 1 to 5 stars
+  comment      String    @db.Text
+  reply        String?   @db.Text
+  isVerified   Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+}
+
+model Gallery {
+  id             String   @id @default(uuid()) @db.Uuid
+  imageUrl       String
+  category       String   // e.g. "HAIR", "BRIDAL", "FACIAL", "SKIN", "NAILS", "INTERIOR"
+  isBeforeAfter  Boolean  @default(false)
+  afterImageUrl  String?
+  createdAt      DateTime @default(now())
+}

@@ -1,0 +1,389 @@
+export interface ServiceItem {
+  id: string;
+  name: string;
+  slug: string;
+  category: string;
+  description: string;
+  benefits: string[];
+  price: number;
+  offerPrice?: number;
+  duration: number; // in minutes
+  imageUrl: string;
+  isActive: boolean;
+}
+
+export interface StaffItem {
+  id: string;
+  name: string;
+  role: string;
+  imageUrl: string;
+  isActive: boolean;
+}
+
+export interface OfferItem {
+  id: string;
+  title: string;
+  code: string;
+  description: string;
+  discountType: "PERCENTAGE" | "FLAT";
+  discountValue: number;
+  startDate: string;
+  endDate: string;
+  isActive: boolean;
+}
+
+export interface PackageItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  validityDays: number;
+  includedServices: string[]; // service names
+  isActive: boolean;
+}
+
+export interface ReviewItem {
+  id: string;
+  customerName: string;
+  rating: number;
+  comment: string;
+  reply?: string;
+  isVerified: boolean;
+  createdAt: string;
+}
+
+export interface GalleryItem {
+  id: string;
+  imageUrl: string;
+  category: string;
+  isBeforeAfter: boolean;
+  afterImageUrl?: string;
+}
+
+export const initialServices: ServiceItem[] = [
+  // SKIN SERVICES
+  {
+    id: "s1",
+    name: "Eyebrows",
+    slug: "eyebrows",
+    category: "SKIN",
+    description: "Precise threading to shape and define your eyebrows according to your facial structure.",
+    benefits: ["Sharp definition", "Quick service", "Long-lasting shape"],
+    price: 50.00,
+    duration: 10,
+    imageUrl: "/images/eyebrows.jpg",
+    isActive: true
+  },
+  {
+    id: "s2",
+    name: "Upper Lip",
+    slug: "upper-lip",
+    category: "SKIN",
+    description: "Gentle threading or waxing for a clean, smooth upper lip area.",
+    benefits: ["Clean look", "Fast and efficient", "Smooth finish"],
+    price: 40.00,
+    duration: 5,
+    imageUrl: "/images/upper-lip.jpg",
+    isActive: true
+  },
+  {
+    id: "s3",
+    name: "Full Face",
+    slug: "full-face",
+    category: "SKIN",
+    description: "Complete facial threading or waxing to remove fine hairs and reveal smooth skin.",
+    benefits: ["Exfoliates skin", "Smooth makeup application", "Even tone"],
+    price: 250.00,
+    duration: 20,
+    imageUrl: "/images/full-face.jpg",
+    isActive: true
+  },
+  {
+    id: "s4",
+    name: "Fruit Facial",
+    slug: "fruit-facial",
+    category: "SKIN",
+    description: "Natural fruit-active extracts to nourish, hydrate, and refresh your skin.",
+    benefits: ["Gentle glow", "Rich in antioxidants", "Suits all skin types"],
+    price: 699.00,
+    duration: 45,
+    imageUrl: "/images/fruit-facial.jpg",
+    isActive: true
+  },
+  {
+    id: "s5",
+    name: "Gold Facial",
+    slug: "gold-facial",
+    category: "SKIN",
+    description: "Luxury facial treatment using gold dust particles to restore youthful elasticity and radiance.",
+    benefits: ["Deep skin repair", "Luminous gold glow", "Anti-aging effects"],
+    price: 999.00,
+    duration: 60,
+    imageUrl: "/images/goldfacial.jpg",
+    isActive: true
+  },
+  {
+    id: "s6",
+    name: "Diamond Facial",
+    slug: "diamond-facial",
+    category: "SKIN",
+    description: "Premium microdermabrasion-style treatment with diamond dust to deeply exfoliate and brighten.",
+    benefits: ["Removes dead cells", "Polished radiant finish", "Deep pore cleansing"],
+    price: 1499.00,
+    duration: 75,
+    imageUrl: "/images/diamond-facial.jpg",
+    isActive: true
+  },
+  {
+    id: "s7",
+    name: "Cleanup",
+    slug: "cleanup",
+    category: "SKIN",
+    description: "Quick refreshing cleanup to remove whiteheads, blackheads, and dirt from the skin.",
+    benefits: ["Unclogs pores", "Reduces tanning", "Instant freshness"],
+    price: 499.00,
+    duration: 30,
+    imageUrl: "/images/cleanup.jpg",
+    isActive: true
+  },
+  {
+    id: "s8",
+    name: "Full Arms Wax",
+    slug: "full-arms-wax",
+    category: "SKIN",
+    description: "Complete hair removal for arms using premium wax for smooth skin.",
+    benefits: ["Hair-free skin", "Exfoliates dead cells", "Slow regrowth"],
+    price: 499.00,
+    duration: 25,
+    imageUrl: "/images/full-arms-wax.jpg",
+    isActive: true
+  },
+  {
+    id: "s9",
+    name: "Full Legs Wax",
+    slug: "full-legs-wax",
+    category: "SKIN",
+    description: "Gentle waxing for smooth, hair-free legs.",
+    benefits: ["Silky skin", "Even texture", "Quick service"],
+    price: 699.00,
+    duration: 30,
+    imageUrl: "/images/full-legs-wax.jpg",
+    isActive: true
+  },
+  {
+    id: "s10",
+    name: "Full Body Wax",
+    slug: "full-body-wax",
+    category: "SKIN",
+    description: "Comprehensive full body hair removal using high-quality wax.",
+    benefits: ["Full body smoothness", "Saves time", "Premium comfort"],
+    price: 1999.00,
+    duration: 90,
+    imageUrl: "/images/full-body-wax.jpg",
+    isActive: true
+  },
+
+  // HAIR SERVICES
+  {
+    id: "s11",
+    name: "Hair Cut",
+    slug: "hair-cut",
+    category: "HAIR",
+    description: "Professional styling and structural haircutting to match your facial profile.",
+    benefits: ["Custom styling", "Volume enhancement", "Easy to style"],
+    price: 499.00,
+    duration: 30,
+    imageUrl: "/images/haircut.jpg",
+    isActive: true
+  },
+  {
+    id: "s12",
+    name: "Hair Trim",
+    slug: "hair-trim",
+    category: "HAIR",
+    description: "Trimming split ends to keep your hair healthy and maintain its existing length.",
+    benefits: ["Prevents split ends", "Quick maintenance", "Promotes growth"],
+    price: 299.00,
+    duration: 15,
+    imageUrl: "/images/hair-trim.jpg",
+    isActive: true
+  },
+  {
+    id: "s13",
+    name: "Hair Spa",
+    slug: "hair-spa",
+    category: "HAIR",
+    description: "Deep conditioning steam mask with essential oils to repair dry and damaged locks.",
+    benefits: ["Frizz control", "Scalp hydration", "Relaxing head massage"],
+    price: 999.00,
+    duration: 60,
+    imageUrl: "/images/hairspa.jpg",
+    isActive: true
+  },
+  {
+    id: "s14",
+    name: "Hair Wash",
+    slug: "hair-wash",
+    category: "HAIR",
+    description: "Refreshing cleanse using premium shampoo and nourishing conditioner.",
+    benefits: ["Clean scalp", "Refreshed feeling", "Soft hair texture"],
+    price: 249.00,
+    duration: 15,
+    imageUrl: "/images/hairwash.jpg",
+    isActive: true
+  },
+  {
+    id: "s15",
+    name: "Blow Dry",
+    slug: "blow-dry",
+    category: "HAIR",
+    description: "Styling blowout with heat settings to give volume and shine to your hair.",
+    benefits: ["Bouncy texture", "Perfect styling", "Long-lasting hold"],
+    price: 399.00,
+    duration: 20,
+    imageUrl: "/images/blowdry.jpg",
+    isActive: true
+  },
+
+  // NAILS SERVICES
+  {
+    id: "s16",
+    name: "Basic Manicure",
+    slug: "basic-manicure",
+    category: "NAILS",
+    description: "Nail shaping, cuticle care, moisturizing massage, and standard polish.",
+    benefits: ["Neat nails", "Soft hands", "Relaxing experience"],
+    price: 499.00,
+    duration: 30,
+    imageUrl: "/images/manicure.jpg",
+    isActive: true
+  },
+  {
+    id: "s17",
+    name: "Basic Pedicure",
+    slug: "basic-pedicure",
+    category: "NAILS",
+    description: "Foot scrub, callus softening, nail detailing, and relaxing massage.",
+    benefits: ["Relieves tension", "Smooth heels", "Clean feet"],
+    price: 599.00,
+    duration: 45,
+    imageUrl: "/images/pedicure.jpg",
+    isActive: true
+  },
+
+  // BRIDAL SERVICES
+  {
+    id: "s18",
+    name: "Party Makeup",
+    slug: "party-makeup",
+    category: "BRIDAL",
+    description: "Sophisticated and vibrant makeup styled for evening events and special occasions.",
+    benefits: ["Camera-ready look", "Flawless base", "Includes eye makeup"],
+    price: 2999.00,
+    duration: 60,
+    imageUrl: "/images/partymakeup.jpg",
+    isActive: true
+  },
+  {
+    id: "s19",
+    name: "Bridal Makeup",
+    slug: "bridal-makeup",
+    category: "BRIDAL",
+    description: "Premium high-definition, camera-ready bridal makeup with draping and extensions.",
+    benefits: ["18-hour waterproof hold", "Pre-event skin consultation", "Complete styling & draping"],
+    price: 14999.00,
+    duration: 180,
+    imageUrl: "/images/bridal.jpg",
+    isActive: true
+  }
+];
+
+export const initialStaff: StaffItem[] = [
+  { id: "e1", name: "Elena Rostova", role: "Master Hair Stylist & Botox Expert", imageUrl: "/images/elena.jpg", isActive: true },
+  { id: "e2", name: "Maya Sen", role: "Senior Aesthetician & Skin Therapist", imageUrl: "/images/maya.jpg", isActive: true },
+  { id: "e3", name: "Sarah Jenkins", role: "Creative Nail Artist & Pedicurist", imageUrl: "/images/sarah.jpg", isActive: true },
+  { id: "e4", name: "Priya Sharma", role: "Bridal Makeup Artist & Hair Designer", imageUrl: "/images/priya.jpg", isActive: true }
+];
+
+export const initialOffers: OfferItem[] = [
+  {
+    id: "o1",
+    title: "Monsoon Skin Revival",
+    code: "GLOW20",
+    description: "Get 20% off on all premium skin treatments and facial packages.",
+    discountType: "PERCENTAGE",
+    discountValue: 20,
+    startDate: "2026-06-01",
+    endDate: "2026-07-31",
+    isActive: true
+  },
+  {
+    id: "o2",
+    title: "Luxury Hair Pamper Discount",
+    code: "HAIRSPA200",
+    description: "Flat ₹200 off on Organic Argan Hair Spa and Keratin Treatments.",
+    discountType: "FLAT",
+    discountValue: 200,
+    startDate: "2026-06-15",
+    endDate: "2026-06-30",
+    isActive: true
+  }
+];
+
+export const initialPackages: PackageItem[] = [
+  {
+    id: "p1",
+    name: "Hair Makeover & Spa Package",
+    description: "Combine professional hair cut, hair wash, and hair spa treatment.",
+    price: 1399.00,
+    validityDays: 30,
+    includedServices: ["Hair Cut", "Hair Wash", "Hair Spa"],
+    isActive: true
+  },
+  {
+    id: "p2",
+    name: "Grand Diamond Glow Ritual",
+    description: "Includes premium diamond facial, deep cleanup, and basic pedicure.",
+    price: 1999.00,
+    validityDays: 60,
+    includedServices: ["Diamond Facial", "Cleanup", "Basic Pedicure"],
+    isActive: true
+  }
+];
+
+export const initialReviews: ReviewItem[] = [
+  {
+    id: "r1",
+    customerName: "Aishwarya Rai",
+    rating: 5,
+    comment: "Priya did an outstanding job with my bridal makeup! The look was very elegant, and it lasted beautifully through the entire ceremony. Thank you, Aroma!",
+    reply: "It was a true honor styling you for your special day, Aishwarya! We wish you a lifetime of joy and beauty.",
+    isVerified: true,
+    createdAt: "2026-06-10T12:00:00Z"
+  },
+  {
+    id: "r2",
+    customerName: "Jessica K.",
+    rating: 5,
+    comment: "Elena's Keratin Smooth treatment is magic! My hair feels incredibly soft, and I don't have to iron it every morning anymore. The emerald interior is gorgeous too.",
+    reply: "Thank you, Jessica! Glad to hear the treatment is saving you styling time. See you soon!",
+    isVerified: true,
+    createdAt: "2026-06-18T16:30:00Z"
+  },
+  {
+    id: "r3",
+    customerName: "Sneha Patel",
+    rating: 4,
+    comment: "Excellent service. Got the Gold Facial and the glow is amazing. Very professional staff and hygienic environment.",
+    isVerified: true,
+    createdAt: "2026-06-20T09:45:00Z"
+  }
+];
+
+export const initialGallery: GalleryItem[] = [
+  { id: "g1", imageUrl: "/images/gallery-hair-1.jpg", category: "HAIR", isBeforeAfter: true, afterImageUrl: "/images/gallery-hair-1-after.jpg" },
+  { id: "g2", imageUrl: "/images/gallery-bridal-1.jpg", category: "BRIDAL", isBeforeAfter: false },
+  { id: "g3", imageUrl: "/images/gallery-skin-1.jpg", category: "SKIN", isBeforeAfter: true, afterImageUrl: "/images/gallery-skin-1-after.jpg" },
+  { id: "g4", imageUrl: "/images/gallery-nails-1.jpg", category: "NAILS", isBeforeAfter: false },
+  { id: "g5", imageUrl: "/images/gallery-interior-1.jpg", category: "SALON INTERIOR", isBeforeAfter: false }
+];

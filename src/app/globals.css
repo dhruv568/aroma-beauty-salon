@@ -1,0 +1,221 @@
+/* Google Fonts Imports integrated via Next.js next/font/google inside layout.tsx */
+
+:root {
+  /* Color Palette */
+  --color-emerald-deep: #0A2A1E;
+  --color-emerald-dark: #071F16;
+  --color-emerald-medium: #144B36;
+  --color-emerald-light: #1A5E44;
+  
+  --color-gold-light: #DFCAA0;
+  --color-gold: #C5A880;
+  --color-gold-dark: #A58B64;
+  --color-gold-accent: #D4AF37;
+
+  --color-cream-light: #FAF8F5;
+  --color-cream-base: #F5EFE6;
+  --color-cream-dark: #EADEC9;
+  
+  --color-white: #FFFFFF;
+  --color-card-bg: #FFFFFF;
+  --color-off-black: #111815;
+  --color-charcoal: #3D4A41;
+  --color-gray-muted: #7A8B80;
+  --color-accent-text: var(--color-emerald-deep);
+  
+  /* Shadow Definitions */
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.03);
+  --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.06);
+  --shadow-luxury: 0 20px 50px rgba(10, 42, 30, 0.08);
+  --shadow-gold: 0 4px 15px rgba(197, 168, 128, 0.2);
+
+  /* Spacing (Classic 8pt Grid) */
+  --space-xs: 0.25rem; /* 4px */
+  --space-sm: 0.5rem;  /* 8px */
+  --space-md: 1rem;   /* 16px */
+  --space-lg: 1.5rem;  /* 24px */
+  --space-xl: 2rem;    /* 32px */
+  --space-xxl: 4rem;   /* 64px */
+  --space-3xl: 6rem;   /* 96px */
+
+  /* Border Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-round: 50%;
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-lazy: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Max Widths */
+  --max-width-content: 1200px;
+  --max-width-text: 700px;
+}
+
+[data-theme="dark"] {
+  --color-cream-light: #071F16;
+  --color-cream-base: #0A2A1E;
+  --color-cream-dark: #144B36;
+  
+  --color-card-bg: #0A2A1E;
+  --color-off-black: #FAF8F5;
+  --color-charcoal: #F5EFE6;
+  --color-gray-muted: #9FB3A6;
+  --color-accent-text: var(--color-gold);
+  
+  --color-gold-light: #F5EFE6;
+  --color-gold: #DFCAA0;
+  --color-gold-dark: #C5A880;
+}
+
+/* Base Normalizations & Resets */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  height: -webkit-fill-available;
+}
+
+body {
+  background-color: var(--color-cream-light);
+  color: var(--color-off-black);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif), serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+button {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+input, textarea, select {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-cream-light);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-dark);
+  border-radius: var(--radius-sm);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-emerald-deep);
+}
+
+/* Helper Layout Classes */
+.container {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+.text-center { text-align: center; }
+.text-gold { color: var(--color-gold); }
+.text-emerald { color: var(--color-emerald-deep); }
+.text-white { color: var(--color-white); }
+.text-muted { color: var(--color-gray-muted); }
+
+/* Flex & Grid Utilities */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+@media (max-width: 992px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 576px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Floating Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Pulse Fade */
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(197, 168, 128, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(197, 168, 128, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(197, 168, 128, 0); }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
