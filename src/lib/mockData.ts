@@ -299,36 +299,10 @@ export const initialServices: ServiceItem[] = [
 ];
 
 export const initialStaff: StaffItem[] = [
-  { id: "e1", name: "Elena Rostova", role: "Master Hair Stylist & Botox Expert", imageUrl: "/images/elena.jpg", isActive: true },
-  { id: "e2", name: "Maya Sen", role: "Senior Aesthetician & Skin Therapist", imageUrl: "/images/maya.jpg", isActive: true },
-  { id: "e3", name: "Sarah Jenkins", role: "Creative Nail Artist & Pedicurist", imageUrl: "/images/sarah.jpg", isActive: true },
-  { id: "e4", name: "Priya Sharma", role: "Bridal Makeup Artist & Hair Designer", imageUrl: "/images/priya.jpg", isActive: true }
+  { id: "e1", name: "Miss Anjana Gotawala", role: "Salon Owner & Lead Specialist", imageUrl: "/images/anjana.jpg", isActive: true }
 ];
 
-export const initialOffers: OfferItem[] = [
-  {
-    id: "o1",
-    title: "Monsoon Skin Revival",
-    code: "GLOW20",
-    description: "Get 20% off on all premium skin treatments and facial packages.",
-    discountType: "PERCENTAGE",
-    discountValue: 20,
-    startDate: "2026-06-01",
-    endDate: "2026-07-31",
-    isActive: true
-  },
-  {
-    id: "o2",
-    title: "Luxury Hair Pamper Discount",
-    code: "HAIRSPA200",
-    description: "Flat ₹200 off on Organic Argan Hair Spa and Keratin Treatments.",
-    discountType: "FLAT",
-    discountValue: 200,
-    startDate: "2026-06-15",
-    endDate: "2026-06-30",
-    isActive: true
-  }
-];
+export const initialOffers: OfferItem[] = [];
 
 export const initialPackages: PackageItem[] = [
   {
@@ -354,19 +328,19 @@ export const initialPackages: PackageItem[] = [
 export const initialReviews: ReviewItem[] = [
   {
     id: "r1",
-    customerName: "Aishwarya Rai",
+    customerName: "Viraj Chevli",
     rating: 5,
-    comment: "Priya did an outstanding job with my bridal makeup! The look was very elegant, and it lasted beautifully through the entire ceremony. Thank you, Aroma!",
-    reply: "It was a true honor styling you for your special day, Aishwarya! We wish you a lifetime of joy and beauty.",
+    comment: "Miss Anjana did an outstanding job with my bridal makeup! The look was very elegant, and it lasted beautifully through the entire ceremony. Thank you, Aroma!",
+    reply: "It was a true honor styling you for your special day, Viraj! We wish you a lifetime of joy and beauty.",
     isVerified: true,
     createdAt: "2026-06-10T12:00:00Z"
   },
   {
     id: "r2",
-    customerName: "Jessica K.",
+    customerName: "Pinky Jariwala",
     rating: 5,
-    comment: "Elena's Keratin Smooth treatment is magic! My hair feels incredibly soft, and I don't have to iron it every morning anymore. The emerald interior is gorgeous too.",
-    reply: "Thank you, Jessica! Glad to hear the treatment is saving you styling time. See you soon!",
+    comment: "Miss Anjana's Keratin Smooth treatment is magic! My hair feels incredibly soft, and I don't have to iron it every morning anymore. The emerald interior is gorgeous too.",
+    reply: "Thank you, Pinky! Glad to hear the treatment is saving you styling time. See you soon!",
     isVerified: true,
     createdAt: "2026-06-18T16:30:00Z"
   },

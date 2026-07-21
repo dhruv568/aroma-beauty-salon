@@ -1639,4 +1639,84 @@
   100% { transform: scale(1); opacity: 0.8; }
 }
 
+/* Motto Top Announcement & Highlight Badges */
+.mottoTopBanner {
+  background: linear-gradient(90deg, #0A2A1E 0%, #174233 50%, #0A2A1E 100%);
+  color: #EADEC9;
+  border-bottom: 1px solid var(--color-gold);
+  padding: 8px 15px;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  z-index: 1001;
+  position: relative;
+}
+
+.mottoHighlightBadge {
+  background: linear-gradient(135deg, #C5A880 0%, #EADEC9 50%, #C5A880 100%);
+  color: #0A2A1E;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(197, 168, 128, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.homeServiceBtnNav {
+  background: linear-gradient(135deg, #C5A880 0%, #EADEC9 100%);
+  color: #0A2A1E !important;
+  font-weight: 700 !important;
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.05em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(197, 168, 128, 0.3);
+}
+
+.homeServiceBtnNav:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(197, 168, 128, 0.5);
+}
+
+.mottoCard {
+  background: linear-gradient(135deg, rgba(10, 42, 30, 0.98) 0%, rgba(20, 64, 49, 0.95) 100%);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  color: var(--color-white);
+  text-align: center;
+  margin: var(--space-xl) 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.mottoCardTitle {
+  font-family: var(--font-serif), serif;
+  font-size: 2rem;
+  color: var(--color-gold);
+  margin-bottom: 10px;
+}
+
+.mottoCardDesc {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+
 

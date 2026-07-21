@@ -53,7 +53,7 @@ const defaultFallbackData: FallbackDatabase = {
   holidays: [],
   settings: {
     businessHours: {
-      open: "09:00",
+      open: "11:00",
       close: "20:00"
     },
     razorpayKeyId: "",
@@ -284,8 +284,7 @@ export async function addStaff(staff: Omit<StaffItem, "id">): Promise<StaffItem>
   return newItem;
 }
 
-// OFFERS
-export async function getOffers(): Promise<OfferItem[]> {
+export async function getOffers(all: boolean = false): Promise<OfferItem[]> {
   const connected = await checkPrismaConnection();
   if (connected) {
     try {
@@ -307,9 +306,13 @@ export async function getOffers(): Promise<OfferItem[]> {
       console.error("Prisma getOffers error:", e);
     }
   }
-  return getFallbackDb().offers.filter(o => {
+  const dbOffers = getFallbackDb().offers.filter(o => o.isActive);
+  if (all) {
+    return dbOffers;
+  }
+  return dbOffers.filter(o => {
     const today = new Date().toISOString().split("T")[0];
-    return o.isActive && today >= o.startDate && today <= o.endDate;
+    return today >= o.startDate && today <= o.endDate;
   });
 }
 
@@ -342,6 +345,58 @@ export async function addOffer(offer: Omit<OfferItem, "id">): Promise<OfferItem>
   db.offers.push(newItem);
   saveFallbackDb(db);
   return newItem;
+}
+
+export async function updateOffer(id: string, updates: Partial<OfferItem>): Promise<boolean> {
+  const connected = await checkPrismaConnection();
+  if (connected) {
+    try {
+      const prismaData: any = {};
+      if (updates.title !== undefined) prismaData.title = updates.title;
+      if (updates.code !== undefined) prismaData.code = updates.code;
+      if (updates.description !== undefined) prismaData.description = updates.description;
+      if (updates.discountType !== undefined) prismaData.discountType = updates.discountType;
+      if (updates.discountValue !== undefined) prismaData.discountValue = Number(updates.discountValue);
+      if (updates.startDate !== undefined) prismaData.startDate = new Date(updates.startDate);
+      if (updates.endDate !== undefined) prismaData.endDate = new Date(updates.endDate);
+      if (updates.isActive !== undefined) prismaData.isActive = updates.isActive;
+
+      await prisma.offer.update({ where: { id }, data: prismaData });
+      return true;
+    } catch (e) {
+      console.error("Prisma updateOffer error:", e);
+    }
+  }
+
+  const db = getFallbackDb();
+  const index = db.offers.findIndex(o => o.id === id);
+  if (index !== -1) {
+    db.offers[index] = { ...db.offers[index], ...updates };
+    saveFallbackDb(db);
+    return true;
+  }
+  return false;
+}
+
+export async function deleteOffer(id: string): Promise<boolean> {
+  const connected = await checkPrismaConnection();
+  if (connected) {
+    try {
+      await prisma.offer.update({ where: { id }, data: { isActive: false } });
+      return true;
+    } catch (e) {
+      console.error("Prisma deleteOffer error:", e);
+    }
+  }
+
+  const db = getFallbackDb();
+  const index = db.offers.findIndex(o => o.id === id);
+  if (index !== -1) {
+    db.offers[index].isActive = false; // soft delete
+    saveFallbackDb(db);
+    return true;
+  }
+  return false;
 }
 
 // PACKAGES
@@ -519,7 +574,7 @@ export async function createBooking(booking: {
     customerPhone: booking.customerPhone,
     staffId: booking.staffId || null,
     staffName: booking.staffId 
-      ? (await getStaff()).find(s => s.id === booking.staffId)?.name || "Elena Rostova"
+      ? (await getStaff()).find(s => s.id === booking.staffId)?.name || "Miss Anjana Gotawala"
       : "Any Expert",
     date: booking.date,
     startTime: booking.startTime,

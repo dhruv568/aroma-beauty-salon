@@ -263,10 +263,9 @@ export default function Home() {
     }
 
     const slots = [
-      "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-      "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-      "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
-      "18:00", "18:30", "19:00", "19:30"
+      "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
+      "14:00", "14:30", "15:00", "15:30", "16:00", "16:30",
+      "17:00", "17:30", "18:00", "18:30", "19:00", "19:30"
     ];
 
     // Filter already booked times for the chosen staff on this date
@@ -425,6 +424,12 @@ export default function Home() {
 
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
+      {/* Motto Announcement Banner */}
+      <div className={styles.mottoTopBanner}>
+        <span>✨ RESULTS ARE GUARANTEED — OUR MOTTO ✨</span>
+        <span style={{ opacity: 0.9 }}>| 11:00 AM to 8:00 PM • Shop No. 114, Udhana Surat</span>
+      </div>
+
       {/* Sticky Header */}
       <header className={styles.header}>
         <div className={`${styles.headerContainer} container`}>
@@ -440,6 +445,9 @@ export default function Home() {
             <a href="#packages" className={styles.navLink} onClick={(e) => smoothScrollTo(e, "packages")}>Packages</a>
             <a href="#reviews" className={styles.navLink} onClick={(e) => smoothScrollTo(e, "reviews")}>Reviews</a>
             <a href="#contact" className={styles.navLink} onClick={(e) => smoothScrollTo(e, "contact")}>Hours & Map</a>
+            <a href="/home-service" className={styles.homeServiceBtnNav}>
+              🏠 Home Service
+            </a>
             {clientName && (
               <span style={{ fontSize: "0.85rem", color: "var(--color-gold)", borderLeft: "1px solid rgba(255,255,255,0.2)", paddingLeft: "15px" }}>
                 Hello, {clientName.split(" ")[0]}
@@ -488,6 +496,7 @@ export default function Home() {
         <a href="#packages" className={styles.mobileMenuLink} onClick={(e) => { setIsMobileMenuOpen(false); smoothScrollTo(e, "packages"); }}>Packages</a>
         <a href="#reviews" className={styles.mobileMenuLink} onClick={(e) => { setIsMobileMenuOpen(false); smoothScrollTo(e, "reviews"); }}>Reviews</a>
         <a href="#contact" className={styles.mobileMenuLink} onClick={(e) => { setIsMobileMenuOpen(false); smoothScrollTo(e, "contact"); }}>Hours & Map</a>
+        <a href="/home-service" className={styles.mobileMenuLink} style={{ color: "var(--color-gold)", fontWeight: 700 }}>🏠 Book Home Service</a>
         
         {/* On small mobile viewport, Book Now shows inside drawer */}
         <button 
@@ -509,20 +518,26 @@ export default function Home() {
         <InteractiveBackground absolute={true} theme="dark" />
         <div className={`${styles.heroContainer} container`} style={{ position: "relative", zIndex: 2 }}>
           <div className={styles.heroContent}>
-            <p className={styles.heroTagline}>Aroma Beauty Salon</p>
-            <h1 className={styles.heroTitle}>Enhancing Your Natural Beauty</h1>
+            <div className={styles.mottoHighlightBadge}>
+              ✨ Results Are Guaranteed — Our Motto ✨
+            </div>
+            <p className={styles.heroTagline} style={{ marginTop: "10px" }}>Aroma Beauty Salon • Udhana, Surat</p>
+            <h1 className={styles.heroTitle}>Results Are Guaranteed</h1>
             <p className={styles.heroDesc}>
-              Enter a world of luxurious pampering. Discover state-of-the-art treatments designed by award-winning specialists, strictly using organic products.
+              Enter a world of luxurious pampering in Surat. Discover state-of-the-art organic hair, skin, & facial treatments. We take 100% pride in our motto: <strong>Results Are Guaranteed</strong>.
             </p>
             <div className={styles.heroActions}>
               <a href="#services" className={styles.primaryBtn}>Explore Services</a>
+              <a href="/home-service" className={styles.secondaryBtn} style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                🏠 Doorstep Home Service
+              </a>
               <button 
                 className={styles.secondaryBtn}
                 onClick={() => {
                   if (services.length > 0) handleOpenBooking(services[0]);
                 }}
               >
-                Quick Book
+                Quick Salon Book
               </button>
             </div>
           </div>
@@ -538,6 +553,10 @@ export default function Home() {
         
         {loading ? (
           <div className="text-center">Loading luxurious experiences...</div>
+        ) : offers.length === 0 ? (
+          <div className="text-center" style={{ padding: "40px 20px", color: "var(--color-gray-muted)", fontFamily: "var(--font-serif), serif", fontSize: "1.2rem", letterSpacing: "0.05em" }}>
+            No offers available
+          </div>
         ) : (
           <div className={styles.offersGrid}>
             {offers.map(offer => (
@@ -733,7 +752,7 @@ export default function Home() {
         <div className="container" style={{ position: "relative", zIndex: 2 }}>
           <div className={styles.sectionHeader}>
             <span className={styles.sectionSubtitle}>Our Specialists</span>
-            <h2 className={styles.sectionTitle} style={{ color: "var(--color-white)" }}>Meet Our Beauty Experts</h2>
+            <h2 className={styles.sectionTitle} style={{ color: "var(--color-white)" }}>Meet Our Beauty Expert</h2>
           </div>
 
           <div className={styles.expertsGrid}>
@@ -791,11 +810,19 @@ export default function Home() {
             <h2 className={styles.sectionTitle}>Business Hours & Location</h2>
           </div>
 
+          {/* Motto Highlight Banner Card */}
+          <div className={styles.mottoCard}>
+            <div className={styles.mottoCardTitle}>✨ Results Are Guaranteed ✨</div>
+            <p className={styles.mottoCardDesc}>
+              "Our Motto is simple & uncompromising: We guarantee visible, 100% satisfaction-backed results for every single service — from organic facials & hair treatments to bridal makeovers."
+            </p>
+          </div>
+
           <div className={styles.contactGrid}>
             {/* Map Column */}
             <div className={styles.mapContainer}>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.99999!2d77.200000!3d28.600000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDM2JzAwLjAiTiA3N8KwMTInMDAuMCJF!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
+                src="https://maps.google.com/maps?q=Shop+no+114+om+shree+sai+jalaram+nagar+bamroli+road+udhana+surat&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -808,20 +835,20 @@ export default function Home() {
             <div className={styles.contactInfoCard}>
               <div className={styles.infoBlock}>
                 <h4>Business Hours</h4>
-                <p>Monday — Sunday: 9:00 AM — 8:00 PM</p>
+                <p>Monday — Sunday: 11:00 AM — 8:00 PM</p>
                 <p style={{ fontSize: "0.85rem", color: "var(--color-gold-dark)", marginTop: "5px" }}>
-                  *Open on all public holidays except Diwali & Christmas.
+                  *Open all 7 days from 11:00 AM to 8:00 PM.
                 </p>
               </div>
 
               <div className={styles.infoBlock}>
                 <h4>Salon Address</h4>
-                <p>12, Luxury Boulevard, Sector 5,</p>
-                <p>New Delhi, Delhi 110001</p>
+                <p>Shop no:114 ,om shree sai jalaram nagar,</p>
+                <p>near opposite saisamarpan ,opposite jalaram samosa,bamroli road,udhana surat</p>
               </div>
 
               <div className={styles.contactButtons}>
-                <a href="tel:+919876543210" className={styles.btnCall}>
+                <a href="tel:+919099908886" className={styles.btnCall}>
                   📞 Call Us: +91 9099908886
                 </a>
                 <a href="https://wa.me/919099908886" target="_blank" rel="noopener noreferrer" className={styles.btnWhatsapp}>
@@ -838,9 +865,9 @@ export default function Home() {
         <div className={`${styles.footerGrid} container`}>
           <div className={styles.footerBrand}>
             <h3>AROMA</h3>
-            <p>"Enhancing Your Natural Beauty"</p>
+            <p className={styles.footerMotto}>✨ "Results Are Guaranteed — Our Motto"</p>
             <p style={{ marginTop: "15px", fontSize: "0.85rem" }}>
-              Experience state-of-the-art organic pampering in New Delhi. No appointments should be missed!
+              Experience state-of-the-art organic pampering in Udhana, Surat. Doorstep Home Services & In-Parlour Appointments!
             </p>
           </div>
           <div className={styles.footerColumn}>
@@ -850,6 +877,7 @@ export default function Home() {
               <li><a href="#services">Skin Care</a></li>
               <li><a href="#services">Nail Art</a></li>
               <li><a href="#services">Bridal Rituals</a></li>
+              <li><a href="/home-service" style={{ color: "var(--color-gold)", fontWeight: 700 }}>🏠 Home Services</a></li>
             </ul>
           </div>
           <div className={styles.footerColumn}>
@@ -868,7 +896,7 @@ export default function Home() {
           </div>
         </div>
         <div className={`${styles.footerBottom} container`}>
-          <p>© 2026 AROMA. All rights reserved.</p>
+          <p>© 2026 AROMA Beauty Salon Surat. All rights reserved. • ✨ Results Are Guaranteed</p>
           <p>Designed with Luxury & Care</p>
         </div>
       </footer>
@@ -878,7 +906,7 @@ export default function Home() {
         <div className={styles.overlay}>
           <div className={styles.popup}>
             <h3 className={styles.popupLogo}>AROMA</h3>
-            <p className={styles.popupTagline}>Enhancing Your Natural Beauty</p>
+            <p className={styles.popupTagline}>✨ Results Are Guaranteed — Our Motto ✨</p>
             <h4 className={styles.popupTitle}>Luxury Guest Registry</h4>
             <p className={styles.popupDesc}>
               Welcome! Register once to unlock fast, direct bookings without usernames or passwords.

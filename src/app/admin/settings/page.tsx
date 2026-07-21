@@ -20,7 +20,7 @@ export default function AdminSettings() {
   const [whatsappNumber, setWhatsappNumber] = useState("");
   
   // Hours State
-  const [openTime, setOpenTime] = useState("09:00");
+  const [openTime, setOpenTime] = useState("11:00");
   const [closeTime, setCloseTime] = useState("20:00");
   
   const [savingSettings, setSavingSettings] = useState(false);

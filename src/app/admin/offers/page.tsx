@@ -17,6 +17,7 @@ interface Offer {
 export default function AdminOffers() {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   // Form State
   const [title, setTitle] = useState("");
@@ -29,7 +30,7 @@ export default function AdminOffers() {
 
   const fetchOffers = async () => {
     try {
-      const response = await fetch("/api/offers");
+      const response = await fetch("/api/offers?all=true");
       const data = await response.json();
       if (data.success) {
         setOffers(data.offers);
@@ -53,30 +54,85 @@ export default function AdminOffers() {
     }
 
     try {
-      const response = await fetch("/api/offers", {
-        method: "POST",
+      const url = "/api/offers";
+      const method = editingId ? "PUT" : "POST";
+      const payload = editingId ? {
+        id: editingId,
+        title,
+        code: code.toUpperCase().replace(/\s+/g, ""),
+        description,
+        discountType,
+        discountValue: Number(discountValue),
+        startDate,
+        endDate
+      } : {
+        title,
+        code: code.toUpperCase().replace(/\s+/g, ""),
+        description,
+        discountType,
+        discountValue: Number(discountValue),
+        startDate,
+        endDate
+      };
+
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          code,
-          description,
-          discountType,
-          discountValue: Number(discountValue),
-          startDate,
-          endDate
-        })
+        body: JSON.stringify(payload)
       });
       const data = await response.json();
-      if (data.success) {
+      if (data.success || data.success === undefined) {
         setTitle("");
         setCode("");
         setDescription("");
         setDiscountValue("");
         setStartDate("");
         setEndDate("");
+        setEditingId(null);
         fetchOffers();
       } else {
-        alert("Failed to add offer: " + data.error);
+        alert("Failed to save offer: " + data.error);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleStartEdit = (o: Offer) => {
+    setEditingId(o.id);
+    setTitle(o.title);
+    setCode(o.code);
+    setDescription(o.description);
+    setDiscountType(o.discountType);
+    setDiscountValue(String(o.discountValue));
+    setStartDate(o.startDate);
+    setEndDate(o.endDate);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setTitle("");
+    setCode("");
+    setDescription("");
+    setDiscountValue("");
+    setStartDate("");
+    setEndDate("");
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this campaign offer?")) return;
+    try {
+      const response = await fetch(`/api/offers?id=${id}`, {
+        method: "DELETE"
+      });
+      const data = await response.json();
+      if (data.success || data.success === undefined) {
+        if (editingId === id) {
+          handleCancelEdit();
+        }
+        fetchOffers();
+      } else {
+        alert("Failed to delete offer: " + data.error);
       }
     } catch (err) {
       console.error(err);
@@ -93,7 +149,7 @@ export default function AdminOffers() {
       {/* Form Card */}
       <div style={cardStyles}>
         <h3 style={{ fontFamily: "var(--font-serif), serif", fontSize: "1.3rem", color: "#0A2A1E", marginBottom: "20px", marginTop: 0 }}>
-          Create Campaign Code
+          {editingId ? "Edit Campaign Code" : "Create Campaign Code"}
         </h3>
         
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
@@ -180,9 +236,20 @@ export default function AdminOffers() {
             </div>
           </div>
 
-          <button type="submit" style={{ ...btnStyles, marginTop: "10px" }}>
-            Launch Campaign
-          </button>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button type="submit" style={{ ...btnStyles, marginTop: "10px", flex: 1 }}>
+              {editingId ? "Update Campaign" : "Launch Campaign"}
+            </button>
+            {editingId && (
+              <button 
+                type="button" 
+                onClick={handleCancelEdit} 
+                style={{ ...btnStyles, backgroundColor: "#EADEC9", color: "#0A2A1E", marginTop: "10px" }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </form>
       </div>
 
@@ -192,46 +259,82 @@ export default function AdminOffers() {
           Launched Campaigns
         </h3>
 
-        <table style={tableStyles}>
-          <thead>
-            <tr style={tableHeaderRowStyles}>
-              <th>Campaign</th>
-              <th>Coupon Code</th>
-              <th>Discount</th>
-              <th>Duration</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {offers.map(o => (
-              <tr key={o.id} style={tableRowStyles}>
-                <td style={{ fontWeight: 500 }}>
-                  <div>{o.title}</div>
-                  <div style={{ fontSize: "0.75rem", color: "#7A8B80" }}>{o.description}</div>
-                </td>
-                <td>
-                  <span style={codeBadgeStyles}>{o.code}</span>
-                </td>
-                <td style={{ fontWeight: 500 }}>
-                  {o.discountType === "PERCENTAGE" ? `${o.discountValue}%` : `₹${o.discountValue}`}
-                </td>
-                <td style={{ fontSize: "0.8rem", color: "#3D4A41" }}>
-                  <div>From: {o.startDate}</div>
-                  <div>To: {o.endDate}</div>
-                </td>
-                <td>
-                  <span style={{
-                    fontSize: "0.75rem",
-                    fontWeight: 600,
-                    color: o.isActive ? "#28a745" : "#d9534f"
-                  }}>
-                    {o.isActive ? "ACTIVE" : "EXPIRED"}
-                  </span>
-                </td>
+        {offers.length === 0 ? (
+          <div style={{ textAlign: "center", color: "#7A8B80", padding: "30px 0" }}>
+            No campaign offers launched yet.
+          </div>
+        ) : (
+          <table style={tableStyles}>
+            <thead>
+              <tr style={tableHeaderRowStyles}>
+                <th>Campaign</th>
+                <th>Coupon Code</th>
+                <th>Discount</th>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {offers.map(o => (
+                <tr key={o.id} style={tableRowStyles}>
+                  <td style={{ fontWeight: 500 }}>
+                    <div>{o.title}</div>
+                    <div style={{ fontSize: "0.75rem", color: "#7A8B80" }}>{o.description}</div>
+                  </td>
+                  <td>
+                    <span style={codeBadgeStyles}>{o.code}</span>
+                  </td>
+                  <td style={{ fontWeight: 500 }}>
+                    {o.discountType === "PERCENTAGE" ? `${o.discountValue}%` : `₹${o.discountValue}`}
+                  </td>
+                  <td style={{ fontSize: "0.8rem", color: "#3D4A41" }}>
+                    <div>From: {o.startDate}</div>
+                    <div>To: {o.endDate}</div>
+                  </td>
+                  <td>
+                    <span style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 600,
+                      color: o.isActive ? "#28a745" : "#d9534f"
+                    }}>
+                      {o.isActive ? "ACTIVE" : "EXPIRED"}
+                    </span>
+                  </td>
+                  <td>
+                    <button 
+                      onClick={() => handleStartEdit(o)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#C5A880",
+                        cursor: "pointer",
+                        marginRight: "12px",
+                        fontWeight: 600,
+                        fontSize: "0.85rem"
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button 
+                      onClick={() => handleDelete(o.id)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#d9534f",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                        fontSize: "0.85rem"
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
     </div>

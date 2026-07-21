@@ -17,7 +17,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Aroma Beauty Salon — Enhancing Your Natural Beauty",
+  title: "Aroma Beauty Salon — 100% Results Are Guaranteed",
   description:
     "Indulge in a premium, luxury salon experience at Aroma Beauty Salon. Browse our exclusive hair, skin, bridal makeup, and nails services and book your instant appointment online without any registration.",
   keywords: [
