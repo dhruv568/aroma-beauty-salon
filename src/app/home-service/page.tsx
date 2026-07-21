@@ -170,7 +170,7 @@ export default function HomeServicePage() {
       {/* Motto Announcement Banner */}
       <div className={styles.mottoTopBanner}>
         <span>✨ RESULTS ARE GUARANTEED — OUR MOTTO ✨</span>
-        <span className={styles.mottoHighlightSpan}>100% Satisfaction or Re-treatment Free</span>
+        <span className={styles.mottoHighlightSpan}>100% Results Guaranteed</span>
       </div>
 
       {/* Header Navigation */}
