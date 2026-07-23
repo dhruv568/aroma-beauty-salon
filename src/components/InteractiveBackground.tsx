@@ -168,12 +168,12 @@ export default function InteractiveBackground({ absolute = false, theme = "light
         }
 
         // Stroke with spotlight gradient effect
-        if (hasMouse) {
+        if (hasMouse && smoothedMouseRef.current.x >= 0 && smoothedMouseRef.current.x <= width) {
           const grad = ctx.createLinearGradient(0, 0, width, 0);
           // Highlight gradient only near the cursor X position
-          const cursorXRatio = smoothedMouseRef.current.x / width;
-          const startRatio = Math.max(0, cursorXRatio - 0.15);
-          const endRatio = Math.min(1, cursorXRatio + 0.15);
+          const cursorXRatio = Math.max(0, Math.min(1, smoothedMouseRef.current.x / width));
+          const startRatio = Math.max(0, Math.min(1, cursorXRatio - 0.15));
+          const endRatio = Math.max(0, Math.min(1, cursorXRatio + 0.15));
 
           grad.addColorStop(0, baseGridColor);
           grad.addColorStop(startRatio, baseGridColor);
@@ -215,11 +215,11 @@ export default function InteractiveBackground({ absolute = false, theme = "light
         }
 
         // Stroke with spotlight gradient effect
-        if (hasMouse) {
+        if (hasMouse && smoothedMouseRef.current.y >= 0 && smoothedMouseRef.current.y <= height) {
           const grad = ctx.createLinearGradient(0, 0, 0, height);
-          const cursorYRatio = smoothedMouseRef.current.y / height;
-          const startRatio = Math.max(0, cursorYRatio - 0.15);
-          const endRatio = Math.min(1, cursorYRatio + 0.15);
+          const cursorYRatio = Math.max(0, Math.min(1, smoothedMouseRef.current.y / height));
+          const startRatio = Math.max(0, Math.min(1, cursorYRatio - 0.15));
+          const endRatio = Math.max(0, Math.min(1, cursorYRatio + 0.15));
 
           grad.addColorStop(0, baseGridColor);
           grad.addColorStop(startRatio, baseGridColor);
