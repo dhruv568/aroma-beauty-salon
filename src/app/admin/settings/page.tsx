@@ -22,6 +22,12 @@ export default function AdminSettings() {
   // Hours State
   const [openTime, setOpenTime] = useState("11:00");
   const [closeTime, setCloseTime] = useState("20:00");
+
+  // Home Service Zone Fees State
+  const [zone1Fee, setZone1Fee] = useState("100");
+  const [zone2Fee, setZone2Fee] = useState("200");
+  const [zone3Fee, setZone3Fee] = useState("350");
+  const [zone4Fee, setZone4Fee] = useState("500");
   
   const [savingSettings, setSavingSettings] = useState(false);
 
@@ -45,6 +51,12 @@ export default function AdminSettings() {
         if (s.businessHours) {
           setOpenTime(s.businessHours.open || "09:00");
           setCloseTime(s.businessHours.close || "20:00");
+        }
+        if (s.homeServiceFees) {
+          setZone1Fee(String(s.homeServiceFees.zone1 || 100));
+          setZone2Fee(String(s.homeServiceFees.zone2 || 200));
+          setZone3Fee(String(s.homeServiceFees.zone3 || 350));
+          setZone4Fee(String(s.homeServiceFees.zone4 || 500));
         }
       }
     } catch (e) {
@@ -113,7 +125,13 @@ export default function AdminSettings() {
           twilioAuthToken,
           twilioFromNumber,
           ownerPhoneNumber,
-          whatsappNumber
+          whatsappNumber,
+          homeServiceFees: {
+            zone1: Number(zone1Fee),
+            zone2: Number(zone2Fee),
+            zone3: Number(zone3Fee),
+            zone4: Number(zone4Fee)
+          }
         })
       });
       const data = await response.json();
@@ -225,6 +243,55 @@ export default function AdminSettings() {
                 value={closeTime}
                 onChange={(e) => setCloseTime(e.target.value)}
                 placeholder="20:00"
+              />
+            </div>
+          </div>
+
+          <div style={{ borderBottom: "1px solid rgba(10, 42, 30, 0.05)", margin: "10px 0" }}></div>
+
+          {/* Home Service Travel Fees */}
+          <h4 style={subHeaderStyles}>🏠 Home Service Travel Fees (Surat Zones)</h4>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <div>
+              <label style={labelStyles}>Zone 1 (0-3 km) Fee (₹)</label>
+              <input
+                type="number"
+                style={inputStyles}
+                value={zone1Fee}
+                onChange={(e) => setZone1Fee(e.target.value)}
+                placeholder="100"
+              />
+            </div>
+            <div>
+              <label style={labelStyles}>Zone 2 (3-7 km) Fee (₹)</label>
+              <input
+                type="number"
+                style={inputStyles}
+                value={zone2Fee}
+                onChange={(e) => setZone2Fee(e.target.value)}
+                placeholder="200"
+              />
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <div>
+              <label style={labelStyles}>Zone 3 (7-12 km) Fee (₹)</label>
+              <input
+                type="number"
+                style={inputStyles}
+                value={zone3Fee}
+                onChange={(e) => setZone3Fee(e.target.value)}
+                placeholder="350"
+              />
+            </div>
+            <div>
+              <label style={labelStyles}>Zone 4 (12+ km) Fee (₹)</label>
+              <input
+                type="number"
+                style={inputStyles}
+                value={zone4Fee}
+                onChange={(e) => setZone4Fee(e.target.value)}
+                placeholder="500"
               />
             </div>
           </div>

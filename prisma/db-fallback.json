@@ -449,6 +449,12 @@
     "businessHours": {
       "open": "11:00",
       "close": "20:00"
+    },
+    "homeServiceFees": {
+      "zone1": 100,
+      "zone2": 200,
+      "zone3": 350,
+      "zone4": 500
     }
   }
 }

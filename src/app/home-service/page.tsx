@@ -67,6 +67,7 @@ export default function HomeServicePage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeCategory, setActiveCategory] = useState<string>("HAIR");
   const [selectedServices, setSelectedServices] = useState<Service[]>([]);
+  const [zones, setZones] = useState<DistanceZone[]>(DISTANCE_ZONES);
   const [selectedZone, setSelectedZone] = useState<DistanceZone>(DISTANCE_ZONES[0]);
   const [customAreaInput, setCustomAreaInput] = useState<string>("");
 
@@ -86,13 +87,26 @@ export default function HomeServicePage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [resServices, resHolidays] = await Promise.all([
+        const [resServices, resHolidays, resSettings] = await Promise.all([
           fetch("/api/services").then((r) => r.json()),
           fetch("/api/holidays").then((r) => r.json()),
+          fetch("/api/settings").then((r) => r.json()),
         ]);
 
         if (resServices.success) setServices(resServices.services);
         if (resHolidays.success) setHolidays(resHolidays.holidays);
+        if (resSettings.success && resSettings.settings && resSettings.settings.homeServiceFees) {
+          const fees = resSettings.settings.homeServiceFees;
+          const updatedZones = DISTANCE_ZONES.map((z) => {
+            if (z.id === "zone-1") return { ...z, fee: Number(fees.zone1 ?? z.fee) };
+            if (z.id === "zone-2") return { ...z, fee: Number(fees.zone2 ?? z.fee) };
+            if (z.id === "zone-3") return { ...z, fee: Number(fees.zone3 ?? z.fee) };
+            if (z.id === "zone-4") return { ...z, fee: Number(fees.zone4 ?? z.fee) };
+            return z;
+          });
+          setZones(updatedZones);
+          setSelectedZone(updatedZones[0]);
+        }
       } catch (err) {
         console.error("Home Service data fetch failed:", err);
       } finally {
@@ -228,7 +242,7 @@ export default function HomeServicePage() {
           </div>
 
           <div className={styles.distanceGrid}>
-            {DISTANCE_ZONES.map((zone) => {
+            {zones.map((zone) => {
               const isSelected = selectedZone.id === zone.id;
               return (
                 <div

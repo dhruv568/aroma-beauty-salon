@@ -39,6 +39,12 @@ interface FallbackDatabase {
     twilioFromNumber: string;
     ownerPhoneNumber: string;
     whatsappNumber: string;
+    homeServiceFees?: {
+      zone1: number;
+      zone2: number;
+      zone3: number;
+      zone4: number;
+    };
   };
 }
 
@@ -62,7 +68,13 @@ const defaultFallbackData: FallbackDatabase = {
     twilioAuthToken: "",
     twilioFromNumber: "",
     ownerPhoneNumber: "",
-    whatsappNumber: ""
+    whatsappNumber: "",
+    homeServiceFees: {
+      zone1: 100,
+      zone2: 200,
+      zone3: 350,
+      zone4: 500
+    }
   }
 };
 
